@@ -6,7 +6,7 @@ import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import Patients from "../pages/Patients";   // ✅ ADD THIS
 import Tests from "../pages/Tests";         // (next ke liye ready)
-// import Reports from "../pages/Reports";     // (next ke liye ready)
+import Reports from "../pages/Reports";     // (next ke liye ready)
 
 export default function AppRoutes() {
   const { isAuth } = useContext(AppContext);
@@ -23,7 +23,7 @@ export default function AppRoutes() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/patients" element={<Patients />} />
           <Route path="/tests" element={<Tests />} />
-          {/* <Route path="/reports" element={<Reports />} /> */}
+          <Route path="/reports" element={<Reports />} />
 
           {/* ✅ Default Redirect */}
           <Route path="*" element={<Navigate to="/" />} />
