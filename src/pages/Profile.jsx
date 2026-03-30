@@ -4,28 +4,51 @@ import MainLayout from "../layouts/MainLayout";
 export default function Profile() {
   const [edit, setEdit] = useState(false);
 
-  const [user, setUser] = useState({
+  const defaultUser = {
     email: "admin@metacore.com",
     name: "admin",
     phone: "",
     role: "",
-  });
+  };
 
-  // Load saved profile
+  const [user, setUser] = useState(defaultUser);
+
+  
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("profile"));
-    if (saved) setUser(saved);
+
+    if (saved) {
+      setUser({
+        email: saved.email || defaultUser.email,
+        name: saved.name || "",
+        phone: saved.phone || "",
+        role: saved.role || "",
+      });
+    }
   }, []);
 
-  // Save profile
   const handleSave = () => {
     localStorage.setItem("profile", JSON.stringify(user));
+    setEdit(false);
+  };
+
+ 
+  const handleCancel = () => {
+    const saved = JSON.parse(localStorage.getItem("profile"));
+    setUser(saved || defaultUser);
     setEdit(false);
   };
 
   return (
     <MainLayout title="Profile">
       <div className="card-form">
+
+        {/* 🔥 PROFILE IMAGE */}
+        <div className="profile-img-box">
+          <img src="/profile.jpg" alt="profile" />
+        </div>
+
+        {/* TOP */}
         <div className="profile-top">
           <h2>Profile Information</h2>
 
@@ -34,22 +57,29 @@ export default function Profile() {
               Edit Profile
             </button>
           ) : (
-            <button className="primary" onClick={handleSave}>
-              Save
-            </button>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button className="primary" onClick={handleSave}>
+                Save
+              </button>
+
+              <button className="secondary" onClick={handleCancel}>
+                Cancel
+              </button>
+            </div>
           )}
         </div>
 
+        {/* FORM */}
         <div className="grid">
           <div>
             <label>Email</label>
-            <input value={user.email} disabled />
+            <input value={user.email || ""} disabled />
           </div>
 
           <div>
             <label>Full Name</label>
             <input
-              value={user.name}
+              value={user.name || ""}
               disabled={!edit}
               onChange={(e) =>
                 setUser({ ...user, name: e.target.value })
@@ -61,7 +91,7 @@ export default function Profile() {
             <label>Phone Number</label>
             <input
               placeholder="Enter your phone number"
-              value={user.phone}
+              value={user.phone || ""}
               disabled={!edit}
               onChange={(e) =>
                 setUser({ ...user, phone: e.target.value })
@@ -73,7 +103,7 @@ export default function Profile() {
             <label>Role</label>
             <input
               placeholder="Enter your role"
-              value={user.role}
+              value={user.role || ""}
               disabled={!edit}
               onChange={(e) =>
                 setUser({ ...user, role: e.target.value })
@@ -81,6 +111,7 @@ export default function Profile() {
             />
           </div>
         </div>
+
       </div>
     </MainLayout>
   );
